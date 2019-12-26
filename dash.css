@@ -1,0 +1,16 @@
+.chart {
+    display: inline-block;
+    width: 47%;
+    margin: 1%;
+    padding: .4%;
+    border: .1px solid black;
+}
+.chart-heading{
+    text-align: center;
+}
+.dashboard-heading{
+    text-align: center;
+}
+.dashboard {
+    border: .1px solid black;
+}

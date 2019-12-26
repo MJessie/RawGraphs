@@ -114,6 +114,7 @@ angular.module('raw.controllers', [])
 
     // load URl
     $scope.$watch('url', url => {
+      url = "https://demo2668225.mockable.io/api/v1%3FUID=U1&PID=P1"
 
       if(!url || !url.length) {
         return;

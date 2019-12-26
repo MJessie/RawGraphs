@@ -601,9 +601,16 @@ angular.module('raw.directives', [])
 .directive('coder', function () {
   return {
     restrict: 'EA',
-    template :  '<textarea id="source" readonly class="source-area" rows="4" ng-model="svgCode"></textarea>',
+	template :  '<textarea id="source" readonly class="source-area" rows="4" ng-model="svgCode"></textarea>'+
+				'<button ng-click="getSVG()">SAVE</button>',
     link: function postLink(scope, element, attrs) {
-
+		scope.getSVG = function() {
+			var svgCode = d3.select('#chart > svg')
+					.attr("version", 1.1)
+        	.attr("xmlns", "http://www.w3.org/2000/svg")
+        	.node().parentNode.innerHTML;
+					console.log(svgCode)
+		}
     	scope.$on('completeGraph',function(){
 
 				var svgCode = d3.select('#chart > svg')
