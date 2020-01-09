@@ -9,14 +9,14 @@ angular.module('raw.controllers', [])
     $scope.loading = false;
 
     // Clipboard
-    $scope.$watch('clipboardText', text =>  {
+    $scope.$watch('clipboardText', text => {
       if (!text) return;
 
       $scope.loading = true;
 
       if (is.url(text)) {
         $scope.importMode = 'url';
-        $timeout(function() { $scope.url = text; });
+        $timeout(function () { $scope.url = text; });
         return;
       }
 
@@ -25,7 +25,7 @@ angular.module('raw.controllers', [])
         selectArray(json);
         $scope.loading = false;
       }
-      catch(error) {
+      catch (error) {
         parseText(text);
       }
 
@@ -38,22 +38,22 @@ angular.module('raw.controllers', [])
     }
 
     // select Array in JSON
-    function selectArray(json){
+    function selectArray(json) {
       $scope.json = json;
       $scope.structure = [];
       expand(json);
     }
 
     // parse Text
-    function parseText(text){
-    //  $scope.loading = false;
+    function parseText(text) {
+      //  $scope.loading = false;
       $scope.json = null;
       $scope.text = text;
       $scope.parse(text);
     }
 
     // load File
-    $scope.uploadFile = file =>  {
+    $scope.uploadFile = file => {
 
       if (file.size) {
 
@@ -62,50 +62,50 @@ angular.module('raw.controllers', [])
         // excel
         if (file.name.search(/\.xls|\.xlsx/) != -1 || file.type.search('sheet') != -1) {
           dataService.loadExcel(file)
-          .then(worksheets => {
-            $scope.fileName = file.name;
-            $scope.loading = false;
-            // multiple sheets
-            if (worksheets.length > 1) {
-              $scope.worksheets = worksheets;
-            // single > parse
-            } else {
-              $scope.parse(worksheets[0].text);
-            }
-          })
+            .then(worksheets => {
+              $scope.fileName = file.name;
+              $scope.loading = false;
+              // multiple sheets
+              if (worksheets.length > 1) {
+                $scope.worksheets = worksheets;
+                // single > parse
+              } else {
+                $scope.parse(worksheets[0].text);
+              }
+            })
         }
 
         // json
         if (file.type.search('json') != -1) {
           dataService.loadJson(file)
-          .then(json => {
-            $scope.fileName = file.name;
-            selectArray(json);
-          })
+            .then(json => {
+              $scope.fileName = file.name;
+              selectArray(json);
+            })
         }
 
         // txt
         if (file.type.search('text') != -1) {
           dataService.loadText(file)
-          .then(text => {
-            $scope.fileName = file.name;
-            parseText(text);
-          })
+            .then(text => {
+              $scope.fileName = file.name;
+              parseText(text);
+            })
         }
       }
     };
 
 
-    function parseData(json){
+    function parseData(json) {
 
       $scope.loading = false;
-    //  $scope.parsed = true;
+      //  $scope.parsed = true;
 
       if (!json) return;
       try {
         selectArray(json);
       }
-      catch(error) {
+      catch (error) {
         console.log(error)
         parseText(json);
       }
@@ -115,97 +115,179 @@ angular.module('raw.controllers', [])
     // load URl
     $scope.$watch('url', url => {
       //url = "https://demo2668225.mockable.io/api/v1%3FUID=U1&PID=P1"
-      url = "https://demo2668225.mockable.io/getCoordinats"
+      //url = "https://demo2668225.mockable.io/getCoordinats"
+      //url = "http://127.0.0.1:3000/getData/api/id2"
 
-      if(!url || !url.length) {
+      if (!url || !url.length) {
         return;
       }
 
-      if (is.not.url(url)) {
+      /* if (is.not.url(url)) {
         $scope.error = "Please insert a valid URL";
         return;
-      }
+      } */
 
       $scope.loading = true;
       var error = null;
       // first trying jsonp
-      $http.jsonp($sce.trustAsResourceUrl(url), {jsonpCallbackParam: 'callback'})
-          .then(response => {
-            $scope.fileName = url;
-            parseData(response.data);
-      }, response => {
+      $http.jsonp($sce.trustAsResourceUrl(url), { jsonpCallbackParam: 'callback' })
+        .then(response => {
+          $scope.fileName = url;
+          parseData(response.data);
+        }, response => {
 
-          $http.get($sce.trustAsResourceUrl(url), {responseType:'arraybuffer'})
-          .then(response => {
+          $http.get($sce.trustAsResourceUrl(url), { responseType: 'arraybuffer' })
+            .then(response => {
 
-            var data = new Uint8Array(response.data);
-            var arr = new Array();
-            for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-            var bstr = arr.join("");
+              var data = new Uint8Array(response.data);
+              var arr = new Array();
+              for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+              var bstr = arr.join("");
 
-            try {
-              var workbook = XLS.read(bstr, {type:"binary"});
-              var worksheets = [];
-        			var sheet_name_list = workbook.SheetNames;
-
-        			sheet_name_list.forEach(function(y) {
-        			  var worksheet = workbook.Sheets[y];
-        				worksheets.push({
-        					name: y,
-        					text : XLSX.utils.sheet_to_csv(worksheet),
-                  rows: worksheet['!range'].e.r
-        				})
-        			});
-
-              $scope.fileName = url;
-              $scope.loading = false;
-
-              // multiple sheets
-              if (worksheets.length > 1) {
-                $scope.worksheets = worksheets;
-              // single > parse
-              } else {
-                parseText(worksheets[0].text);
-              }
-            }
-            catch(error) {
-              $scope.fileName = url;
               try {
-                var json = JSON.parse(bstr);
-                selectArray(json);
-              }
-              catch(error) {
-                parseText(bstr);
-              }
-            }
+                var workbook = XLS.read(bstr, { type: "binary" });
+                var worksheets = [];
+                var sheet_name_list = workbook.SheetNames;
 
-          },
-          response => {
-            $scope.loading = false;
-            $scope.error = "Something wrong with the URL you provided. Please be sure it is the correct address.";
-          }
-        )
+                sheet_name_list.forEach(function (y) {
+                  var worksheet = workbook.Sheets[y];
+                  worksheets.push({
+                    name: y,
+                    text: XLSX.utils.sheet_to_csv(worksheet),
+                    rows: worksheet['!range'].e.r
+                  })
+                });
 
-      });
+                $scope.fileName = url;
+                $scope.loading = false;
+
+                // multiple sheets
+                if (worksheets.length > 1) {
+                  $scope.worksheets = worksheets;
+                  // single > parse
+                } else {
+                  parseText(worksheets[0].text);
+                }
+              }
+              catch (error) {
+                $scope.fileName = url;
+                try {
+                  var json = JSON.parse(bstr);
+                  selectArray(json);
+                }
+                catch (error) {
+                  parseText(bstr);
+                }
+              }
+
+            },
+              response => {
+                $scope.loading = false;
+                $scope.error = "Something wrong with the URL you provided. Please be sure it is the correct address.";
+              }
+            )
+
+        });
 
     });
+    $scope.example1model = [];
+    $scope.multi_model = {};
+    $scope.searchSelectAllSettings = { enableSearch: true, showSelectAll: true, keyboardControls: true, styleActive: true };
 
+
+$scope.$watch('testObj',test12=>{
+  console.log("test",test12)
+})
+
+    //for filter select option handling
+    $scope.$watch('selectFilter',selectFilter => {
+      console.log('selectFilter',selectFilter)
+      console.log($scope.disphide)
+    })
+
+    $scope.disphide = {};
+
+    $scope.hid = true;
+
+    $scope.hideDiv = function() {
+      if($scope.hid) {
+        $scope.hid = false
+      }
+
+      else $scope.hid = true
+    } 
+    //for druid apis (getting data from druid)
+
+    $scope.apiList = [
+      { name: "Pie/Bar", url: "http://localhost:3000/getData/api/id1" },
+      { name: "Pie/Bar/Sunburst", url: "http://localhost:3000/getData/api/id2" }
+    ]
+//options for selecting druid dataset
+    $scope.$watch('selectOption', selectOption => {
+      if(!selectOption) {
+        return
+      }
+      console.log(selectOption,$scope.example1model,$scope.multi_model)
+
+      var req = {
+        method: 'GET',
+        url: selectOption
+      }
+      $http(req).then(res => {
+        selectArray(res.data);
+      })
+        .catch(err => { console.log('error', err) })
+    })
+
+    /* $scope.$watch('radiovar', radiovar => {
+      if (radiovar === 'POST') {
+        var req = {
+          method: 'POST',
+          url: 'http://localhost:8082/druid/v2/sql',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+          },
+          data: {
+            "query": "SELECT * from SocionData"
+          }
+        }
+        $http(req).then(res => {
+          selectArray({ data: res.data });
+        })
+          .catch(err => { console.log('error', err) })
+      }
+
+      if (radiovar == 'GET') {
+        var req = {
+          method: 'GET',
+          url: 'https://demo2668225.mockable.io/getCoordinats'
+        }
+
+
+        $http(req).then(res => {
+          selectArray(res.data);
+        })
+          .catch(err => { console.log('error', err) })
+
+      }
+    }) */
 
     $scope.samples = [
-      { title : 'Biggest cities per continent', type : 'Distributions', url : 'data/cities.csv'},
-      { title : 'Countries GDP', type : 'Other', url : 'data/countriesGDP.csv'},
-      { title : 'Cars', type : 'Multivariate', url : 'data/multivariate.csv' },
-      { title : 'Movies', type : 'Dispersions', url : 'data/dispersions.csv' },
-      { title : 'Music industry', type: 'Time Series', url : 'data/music.csv' },
-      { title : 'Lineup', type : 'Time chunks', url : 'data/lineup.tsv' },
-      { title : 'Orchestras', type : 'Hierarchies (weighted)', url : 'data/orchestra.csv' },
-      { title : 'Animal kingdom', type: 'Hierarchies', url : 'data/animals.tsv' },
-      { title : 'Titanic\'s passengers', type : 'Multi categorical', url : 'data/titanic.tsv' },
-      { title : 'Most frequent letters', type: 'Matrix (narrow)', url:'data/letters.tsv'}
+      { title: 'Biggest cities per continent', type: 'Distributions', url: 'data/cities.csv' },
+      { title: 'Countries GDP', type: 'Other', url: 'data/countriesGDP.csv' },
+      { title: 'Cars', type: 'Multivariate', url: 'data/multivariate.csv' },
+      { title: 'Movies', type: 'Dispersions', url: 'data/dispersions.csv' },
+      { title: 'Music industry', type: 'Time Series', url: 'data/music.csv' },
+      { title: 'Lineup', type: 'Time chunks', url: 'data/lineup.tsv' },
+      { title: 'Orchestras', type: 'Hierarchies (weighted)', url: 'data/orchestra.csv' },
+      { title: 'Animal kingdom', type: 'Hierarchies', url: 'data/animals.tsv' },
+      { title: 'Titanic\'s passengers', type: 'Multi categorical', url: 'data/titanic.tsv' },
+      { title: 'Most frequent letters', type: 'Matrix (narrow)', url: 'data/letters.tsv' }
     ]
 
     $scope.selectSample = sample => {
-//    $scope.$watch('sample', function (sample){
+      //    $scope.$watch('sample', function (sample){
       if (!sample) return;
       $scope.text = "";
       $scope.loading = true;
@@ -221,16 +303,16 @@ angular.module('raw.controllers', [])
       );
     }//);
 
-    $(document.getElementById("load-data")).on('dragenter', function(e){
+    $(document.getElementById("load-data")).on('dragenter', function (e) {
       $scope.importMode = 'file';
       $scope.parsed = false;
       $scope.$digest();
     });
 
-    $scope.$watch('dataView', function (n,o){
+    $scope.$watch('dataView', function (n, o) {
       if (!$('.parsed .CodeMirror')[0]) return;
       var cm = $('.parsed .CodeMirror')[0].CodeMirror;
-      $timeout(function() { cm.refresh() });
+      $timeout(function () { cm.refresh() });
     });
 
     // init
@@ -238,7 +320,7 @@ angular.module('raw.controllers', [])
     $scope.data = [];
     $scope.metadata = [];
     $scope.error = false;
-  //  $scope.loading = true;
+    //  $scope.loading = true;
 
     $scope.importMode = 'clipboard';
 
@@ -259,10 +341,10 @@ angular.module('raw.controllers', [])
 
     $scope.log = '';
 
-    $scope.files=[];
+    $scope.files = [];
 
 
-    $scope.$watch('importMode', function(){
+    $scope.$watch('importMode', function () {
       // reset
       $scope.parsed = false;
       $scope.loading = false;
@@ -281,7 +363,7 @@ angular.module('raw.controllers', [])
 
     var arrays = [];
 
-    $scope.unstack = function(){
+    $scope.unstack = function () {
       if (!$scope.stackDimension) return;
       var data = $scope.data;
       var base = $scope.stackDimension.key;
@@ -290,13 +372,13 @@ angular.module('raw.controllers', [])
 
       data.forEach(row => {
         for (var column in row) {
-            if (column == base) continue;
-            var obj = {};
-            obj[base] = row[base];
-            obj.column = column;
-            obj.value = row[column];
-            unstacked.push(obj);
-          }
+          if (column == base) continue;
+          var obj = {};
+          obj[base] = row[base];
+          obj.column = column;
+          obj.value = row[column];
+          unstacked.push(obj);
+        }
       })
       $scope.oldData = data;
       parseText(d3.tsvFormat(unstacked));
@@ -305,13 +387,13 @@ angular.module('raw.controllers', [])
 
     }
 
-    $scope.stack = function(){
+    $scope.stack = function () {
       parseText(d3.tsvFormat($scope.oldData));
       $scope.unstacked = false;
     }
 
 
-    function jsonTree(json){
+    function jsonTree(json) {
       // mettere try
       var tree = JSON.parse(json);
       $scope.json = tree;
@@ -321,7 +403,7 @@ angular.module('raw.controllers', [])
     }
 
 
-    function expand(parent){
+    function expand(parent) {
       for (var child in parent) {
         if (is.object(parent[child]) || is.array(parent[child])) {
           expand(parent[child]);
@@ -346,7 +428,7 @@ angular.module('raw.controllers', [])
         for (var p in o) {
           if (!rows.hasOwnProperty(p)) rows[p] = {};
           if (!rows[p].hasOwnProperty(o[p])) rows[p][o[p]] = -1;
-          rows[p][o[p]]+=1;
+          rows[p][o[p]] += 1;
         }
       })
 
@@ -354,14 +436,14 @@ angular.module('raw.controllers', [])
         for (var p in rows[r]) {
           for (var ra in rows) {
             if (r == ra) break;
-        //    if (p == "") break;
-            if (rows[ra].hasOwnProperty(p)) rows[r][p]-=2.5;
+            //    if (p == "") break;
+            if (rows[ra].hasOwnProperty(p)) rows[r][p] -= 2.5;
 
           }
         }
       }
 
-      var m = d3.values(rows).map(d3.values).map(d => { return d3.sum(d)/n; });
+      var m = d3.values(rows).map(d3.values).map(d => { return d3.sum(d) / n; });
       //console.log(d3.mean(m),m)
       $scope.pivot = d3.mean(m);
 
@@ -391,12 +473,12 @@ angular.module('raw.controllers', [])
         pivotable($scope.data);
         $scope.parsed = true;
 
-        $timeout(function() {
-          $scope.charts = raw.charts.values().sort(function (a,b){ return d3.ascending(a.category(),b.category()) || d3.ascending(a.title(),b.title()) })
-          $scope.chart = $scope.charts.filter(d => {return d.title() == 'Scatter Plot'})[0];
+        $timeout(function () {
+          $scope.charts = raw.charts.values().sort(function (a, b) { return d3.ascending(a.category(), b.category()) || d3.ascending(a.title(), b.title()) })
+          $scope.chart = $scope.charts.filter(d => { return d.title() == 'Scatter Plot' })[0];
           $scope.model = $scope.chart ? $scope.chart.model() : null;
         });
-      } catch(e){
+      } catch (e) {
         $scope.data = [];
         $scope.metadata = [];
         $scope.error = e.name == "ParseError" ? +e.message : false;
@@ -404,7 +486,7 @@ angular.module('raw.controllers', [])
       if (!$scope.data.length && $scope.model) $scope.model.clear();
       $scope.loading = false;
       var cm = $('.parsed .CodeMirror')[0].CodeMirror;
-      $timeout(function() { cm.refresh(); cm.refresh(); } );
+      $timeout(function () { cm.refresh(); cm.refresh(); });
     }
 
     $scope.delayParse = dataService.debounce($scope.parse, 500, false);
@@ -419,7 +501,7 @@ angular.module('raw.controllers', [])
       if (!$('.parsed .CodeMirror')[0]) return;
       var cm = $('.parsed .CodeMirror')[0].CodeMirror;
       if (!error) {
-        cm.removeLineClass($scope.lastError,'wrap','line-error');
+        cm.removeLineClass($scope.lastError, 'wrap', 'line-error');
         return;
       }
       cm.addLineClass(error, 'wrap', 'line-error');
@@ -427,7 +509,7 @@ angular.module('raw.controllers', [])
       $scope.lastError = error;
     })
 
-    $('body').mousedown(function (e,ui){
+    $('body').mousedown(function (e, ui) {
       if ($(e.target).hasClass("dimension-info-toggle")) return;
       $('.dimensions-wrapper').each(e => {
         angular.element(this).scope().open = false;
@@ -436,9 +518,9 @@ angular.module('raw.controllers', [])
     })
 
     $scope.codeMirrorOptions = {
-      dragDrop : false,
-      lineNumbers : true,
-      lineWrapping : true
+      dragDrop: false,
+      lineNumbers: true,
+      lineWrapping: true
     }
 
     $scope.selectChart = chart => {
@@ -448,54 +530,54 @@ angular.module('raw.controllers', [])
       $scope.model = $scope.chart.model();
     }
 
-    function refreshScroll(){
+    function refreshScroll() {
       $('[data-spy="scroll"]').each(function () {
         $(this).scrollspy('refresh');
       });
     }
 
-    $(window).scroll(function(){
+    $(window).scroll(function () {
 
       // check for mobile
       if ($(window).width() < 760 || $('#mapping').height() < 300) return;
 
       var scrollTop = $(window).scrollTop() + 0,
-          mappingTop = $('#mapping').offset().top + 10,
-          mappingHeight = $('#mapping').height(),
-          isBetween = scrollTop > mappingTop + 50 && scrollTop <= mappingTop + mappingHeight - $(".sticky").height() - 20,
-          isOver = scrollTop > mappingTop + mappingHeight - $(".sticky").height() - 20,
-          mappingWidth = mappingWidth ? mappingWidth : $('.mapping').width();
+        mappingTop = $('#mapping').offset().top + 10,
+        mappingHeight = $('#mapping').height(),
+        isBetween = scrollTop > mappingTop + 50 && scrollTop <= mappingTop + mappingHeight - $(".sticky").height() - 20,
+        isOver = scrollTop > mappingTop + mappingHeight - $(".sticky").height() - 20,
+        mappingWidth = mappingWidth ? mappingWidth : $('.mapping').width();
 
-      if (mappingHeight-$('.dimensions-list').height() > 90) return;
+      if (mappingHeight - $('.dimensions-list').height() > 90) return;
       //console.log(mappingHeight-$('.dimensions-list').height())
       if (isBetween) {
         $(".sticky")
-          .css("position","fixed")
-          .css("width", mappingWidth+"px")
-          .css("top","20px")
+          .css("position", "fixed")
+          .css("width", mappingWidth + "px")
+          .css("top", "20px")
       }
 
-     if(isOver) {
+      if (isOver) {
         $(".sticky")
-          .css("position","fixed")
-          .css("width", mappingWidth+"px")
-          .css("top", (mappingHeight - $(".sticky").height() + 0 - scrollTop+mappingTop) + "px");
-          return;
+          .css("position", "fixed")
+          .css("width", mappingWidth + "px")
+          .css("top", (mappingHeight - $(".sticky").height() + 0 - scrollTop + mappingTop) + "px");
+        return;
       }
 
       if (isBetween) return;
 
       $(".sticky")
-        .css("position","relative")
-        .css("top","")
+        .css("position", "relative")
+        .css("top", "")
         .css("width", "");
 
     })
 
-      $scope.sortCategory = chart => {
-        // sort first by category, then by title
-        return [chart.category(),chart.title()];
-      };
+    $scope.sortCategory = chart => {
+      // sort first by category, then by title
+      return [chart.category(), chart.title()];
+    };
 
     $(document).ready(refreshScroll);
 

@@ -11,7 +11,7 @@ angular.module('raw', [
   'mgcrea.ngStrap',
   'ui',
   'colorpicker.module',
-  'ngFileUpload'
+  'ngFileUpload','angularjs-dropdown-multiselect'
 ])
 
 .config(['$routeProvider','$locationProvider', function ($routeProvider,$locationProvider) {

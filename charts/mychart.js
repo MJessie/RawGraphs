@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     // A multiple bar chart
 
@@ -35,18 +35,18 @@
     // Mapping function
     // For each record in the data returns the values
     // for the X and Y dimensions and casts them as numbers
-    model.map(function(data) {
+    model.map(function (data) {
 
         var results = d3.nest()
-            .key(function(d) {
+            .key(function (d) {
                 return d[groups()]
             })
-            .key(function(d) {
+            .key(function (d) {
                 return d[categories()]
             })
-            .rollup(function(v) {
+            .rollup(function (v) {
                 return {
-                    size: !sizes() ? v.length : d3.sum(v, function(e) {
+                    size: !sizes() ? v.length : d3.sum(v, function (e) {
                         return e[sizes()]
                     }),
                     category: categories(v[0]),
@@ -57,8 +57,8 @@
             .entries(data)
 
         // remap the array
-        results.forEach(function(d) {
-            d.values = d.values.map(function(item) {
+        results.forEach(function (d) {
+            d.values = d.values.map(function (item) {
                 return item.value
             })
         })
@@ -114,16 +114,16 @@
     // selection represents the d3 selection (svg)
     // data is not the original set of records
     // but the result of the model map function
-    chart.draw(function(selection, data) {
-        let newdata = data[0].values.map((element)=>{
+    chart.draw(function (selection, data) {
+        let newdata = data[0].values.map((element) => {
             return element.size
         })
- 
-        let categoriesData = data[0].values.map((element)=>{
+
+        let categoriesData = data[0].values.map((element) => {
             return element.category
         })
 
-        console.log(data[0].values,newdata)
+        console.log(data[0].values, newdata)
 
         // svg size
         selection
@@ -131,48 +131,49 @@
             .attr("height", height())
 
 
-            
-var data = [10, 20, 100];
 
-var width1 = 760,
-    height1 = 500,
-    radius1 = Math.min(width1, height1) / 2;
+        var data = [10, 20, 100];
 
-var color = d3.scaleOrdinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888"]);
+        var width1 = 760,
+            height1 = 500,
+            radius1 = Math.min(width1, height1) / 2;
 
-var arc = d3.arc()
-    .outerRadius(radius1 - 10)
-    .innerRadius(0);
+        var color = d3.scaleOrdinal()
+            .range(["#98abc5", "#8a89a6", "#7b6888"]);
 
-var labelArc = d3.arc()
-    .outerRadius(radius1 - 40)
-    .innerRadius(radius1 - 40);
+        var arc = d3.arc()
+            .outerRadius(radius1 - 10)
+            .innerRadius(0);
 
-var pie = d3.pie()
-    .sort(null)
-    .value(function(d) { return d; });
+        var labelArc = d3.arc()
+            .outerRadius(radius1 - 40)
+            .innerRadius(radius1 - 40);
 
-var svg = selection.append("g")
-    .attr("width", width1)
-    .attr("height", height1)
-  .append("g")
-    .attr("transform", "translate(" + width1 / 2 + "," + height1 / 2 + ")");
+        var pie = d3.pie()
+            .sort(null)
+            .value(function (d) { return d; });
 
-  var g = svg.selectAll(".arc")
-      .data(pie(newdata))
-    .enter().append("g")
-      .attr("class", "arc");
+        var svg = selection.append("g")
+            .attr("width", width1)
+            .attr("height", height1)
+            .append("g")
+            .attr("transform", "translate(" + width1 / 2 + "," + height1 / 2 + ")");
 
-  g.append("path")
-      .attr("d", arc)
-      .style("fill", function(d) { return color(d.data); });
+        var g = svg.selectAll(".arc")
+            .data(pie(newdata))
+            .enter().append("g")
+            .attr("class", "arc");
 
-  g.append("text")
-      .attr("transform", function(d) {
-          console.log('ddd',d); return "translate(" + labelArc.centroid(d) + ")"; })
-      .attr("dy", ".35em")
-      .text(function(d) { return d.data; });
+        g.append("path")
+            .attr("d", arc)
+            .style("fill", function (d) { return color(d.data); });
+
+        g.append("text")
+            .attr("transform", function (d) {
+                return "translate(" + labelArc.centroid(d) + ")";
+            })
+            .attr("dy", ".35em")
+            .text(function (d) { return d.data; });
 
     })
 })();

@@ -134,6 +134,26 @@ angular.module('raw.directives', [])
 	      link: function postLink(scope, element, attrs) {
 
 	        function update(){
+				scope.filterObj_multi = window.filterObj_multi;
+				if(scope.filterObj_multi && scope.filterObj_multi.length > 0 && window.filter2_keys) {
+					scope.filterObj_multi.forEach((element) => {  
+						scope.multi_model[element['key']] = scope.multi_model[element['key']] || []
+						scope.multi_model = _.pick(scope.multi_model,window.filter2_keys)	
+					})
+				}
+				if(scope.filterObj_multi && scope.filterObj_multi.length === 0) {
+					scope.multi_model = {}
+				}
+				scope.filterObj = window.filterObj;
+				window.filtered_multi = scope.multi_model;
+				window.filtered = scope.example1model;
+
+				if(scope.filterObj && scope.filterObj[0]['id'] === undefined) {
+					window.filtered = [];
+					scope.example1model = []
+				}
+
+				console.log(scope.example1model,"scope.example1model",scope.filterObj);
 	        	$('*[data-toggle="tooltip"]').tooltip({ container:'body' });
 
 	        	d3.select(element[0]).select("*").remove();

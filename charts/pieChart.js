@@ -20,7 +20,7 @@
     // For each record in the dataset a pie chart abstraction is created.
     // Records are grouped according the 'group' variable.
 
-    model.map(function(data) {
+    model.map(function(data) {console.log("dimens",dimensions())
 
         // Check if dimensions are set.
         // In theory should be not necessary, to be fixed.

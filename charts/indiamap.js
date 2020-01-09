@@ -263,7 +263,7 @@
             }
         ]
 
-        var color = d3.scale.ordinal()
+        var color = d3.scaleOrdinal()
             .domain([1, 2, 3, 4, 5, 6, 7, 8, 9])
             .range(colorbrewer.Oranges[9]);
 
@@ -271,8 +271,8 @@
           .scale(800)
           .translate([-500,600]);*/
 
-        var projection = d3.geo.mercator().scale(1100).translate([-1000, 800]);
-        var path = d3.geo.path()
+        var projection = d3.geoMercator().scale(1100).translate([-1000, 800]);
+        var path = d3.geoPath()
             .projection(projection);
 
         var svg = selection.append("g")
@@ -292,7 +292,7 @@
             //.on('mouseover', tip.show)
             //.on('mouseout', tip.hide)
 
-
+/* 
             var tip = d3.tip()
                 .attr('class', 'd3-tip')
                 .offset([-5, 0])
@@ -300,9 +300,9 @@
                 .style("top", "400px")
                 .html(function (d) {debugger
                     return ("<a href=#" + " target='_blank'>" + d.latitude + "</a>");
-                })
+                }) */
 
-            svg.call(tip);
+          //  svg.call(tip);
 
 
             svg.selectAll(".pin")
@@ -314,12 +314,12 @@
                         d.longitude,
                         d.latitude
                     ]) + ")";
-                })
+                })/* 
                 .on('mouseover', tip.show)
-                .on('click', tip.hide);
+                .on('click', tip.hide); */
 
             //var projection = d3.geo.mercator().scale(900).translate([-600,700]);
-            var path = d3.geo.path().projection(projection);
+            var path = d3.geoPath().projection(projection);
 
             var areas = group.append("path")
                 .attr("d", path)

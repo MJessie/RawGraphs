@@ -38,7 +38,32 @@
 
 				</div>
 
+<div class="request-select">
+		<!-- <label>GET</label>
+		<input type="radio"
+       ng-model="radiovar" value="GET">
 
+	   <label>POST</label>
+		<input type="radio"
+       ng-model="radiovar"
+	   value="POST"> -->
+
+<!-- 	   <select id="example-getting-started" multiple="multiple">
+		<option value="cheese">Cheese</option>
+		<option value="tomatoes">Tomatoes</option>
+		<option value="mozarella">Mozzarella</option>
+		<option value="mushrooms">Mushrooms</option>
+		<option value="pepperoni">Pepperoni</option>
+		<option value="onions">Onions</option>
+	</select>
+ --><!-- 
+ <input type="text" ng-model="selectFilter"> -->
+
+	   <select ng-model="selectOption">
+		<option value="">--Select--</option>
+		<option ng-repeat="option in apiList" value="{{option.url}}">{{option.name}}</option>
+		</select>
+</div>
 			<div class="row">
 
 					<div class="col-lg-2">
@@ -360,6 +385,19 @@
 						</div>
 
 					</div>
+<!-- 
+	<div ng-dropdown-multiselect="" options="filterObj" 
+	selected-model="example1model"></div> -->
+ <!-- 
+					<div class="col-lg-4 col-md-4 dimensions-wrapper">
+						<div class="dimensions-model">
+ 
+							<select ng-model="selectFilter" multiple>
+								<option value="">Select..</option>
+								<option ng-repeat="option in filterObj" value="{{option}}">{{option.label}}</option>
+							</select> 
+						</div>
+					</div>  -->
 
 				</div>
 			</div>
@@ -386,7 +424,16 @@
 		<div class="row">
 
 			<div class="col-lg-3">
-				<ul class="list-unstyled">
+				<ul class="list-unstyled"> 
+
+					<div ng-repeat="obj in filterObj_multi"><span>{{obj['key']}}</span>
+						<div  ng-dropdown-multiselect="" options="obj['options']" 
+				selected-model="multi_model[obj['key']]" extra-settings="searchSelectAllSettings"></div>
+					</div>
+ <!-- 
+				<div  ng-dropdown-multiselect="" options="filterObj" 
+				selected-model="example1model" extra-settings="searchSelectAllSettings" ></div> --> 
+
 					<li ng-repeat="option in chart.options() track by $index" chart-option>
 						<p class="option-title text-capitalize">
 							{{option.title()}}

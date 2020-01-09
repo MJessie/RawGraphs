@@ -73,7 +73,8 @@
 <!--leaflet-->
 
 <script src="http://colorbrewer2.org/export/colorbrewer.js"></script>
-<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<!-- <script src="https://d3js.org/d3.v3.min.js"></script> -->
 <script src="https://d3js.org/topojson.v1.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 
@@ -319,32 +320,33 @@
     <!-- raw -->
     <script type="text/javascript" src="lib/raw.js"></script>
 
-    <!-- charts -->
+    <!-- charts --><!-- 
     <script src="charts/treemap.js"></script>
-    <script src="charts/streamgraph.js"></script>
+    <script src="charts/streamgraph.js"></script> -->
     <script src="charts/scatterPlot.js"></script>
-    <script src="charts/packing.js"></script>
+    <!-- <script src="charts/packing.js"></script>
     <script src="charts/clusterDendrogram.js"></script>
     <script src="charts/voronoi.js"></script>
     <script src="charts/alluvial.js"></script>
     <script src="charts/convexHullMultiple.js"></script>
     <script src="charts/hexagonalBinning.js"></script>
-    <script src="charts/parallelCoordinates.js"></script>
-    <script src="charts/circularDendrogram.js"></script>
+    <script src="charts/parallelCoordinates.js"></script> -->
+    <!-- <script src="charts/circularDendrogram.js"></script>
     <script src="charts/smallMultiplesArea.js"></script>
     <script src="charts/bumpChart.js"></script>
     <script src="charts/sunburst.js"></script>
-    <script src="charts/gantt.js"></script>
-    <script src="charts/horizonChart.js"></script>
+     --><!--<script src="charts/gantt.js"></script>
+    <script src="charts/horizonChart.js"></script> -->
     <script src="charts/barChart.js"></script>
-    <script src="charts/pieChart.js"></script>
+    <script src="charts/pieChart.js"></script><!-- 
     <script src="charts/contourPlot.js"></script>
     <script src="charts/beeswarmPlot.js"></script>
     <script src="charts/boxPlot.js"></script>
     <script src="charts/chart.js"></script>
     <script src="charts/mychart.js"></script>
     <script src="charts/leafletchart.js"></script>
-    <script src="charts/indiamap.js"></script>
+    <script src="charts/indiamap.js"></script> -->
+    <script src="charts/barChart2.js"></script>
 
     <!-- angular -->
     <script
@@ -392,6 +394,11 @@
       src="bower_components/js-xlsx/dist/xlsx.full.min.js"
     ></script>
 
+    <script type="text/javascript"
+    src="bower_components/angularjs-dropdown-multiselect/dist/angularjs-dropdown-multiselect.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/controllers.js"></script>
@@ -402,10 +409,10 @@
     <script src="js/analytics.js"></script>
 
     <!-- open pre-launch-modal -->
-    <script type="text/javascript">
+ <!--    <script type="text/javascript">
         $('#pre-launch-modal')
             // .modal({'backdrop', 'static'})
             .modal('toggle')
-    </script>
+    </script> -->
   </body>
 </html>
