@@ -190,7 +190,6 @@ angular.module('raw.controllers', [])
         });
 
     });
-    $scope.example1model = [];
     $scope.multi_model = {};
     $scope.searchSelectAllSettings = { enableSearch: true, showSelectAll: true, keyboardControls: true, styleActive: true };
 

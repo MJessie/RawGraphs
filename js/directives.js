@@ -144,14 +144,7 @@ angular.module('raw.directives', [])
 				if(scope.filterObj_multi && scope.filterObj_multi.length === 0) {
 					scope.multi_model = {}
 				}
-				scope.filterObj = window.filterObj;
 				window.filtered_multi = scope.multi_model;
-				window.filtered = scope.example1model;
-
-				if(scope.filterObj && scope.filterObj[0]['id'] === undefined) {
-					window.filtered = [];
-					scope.example1model = []
-				}
 
 				console.log(scope.example1model,"scope.example1model",scope.filterObj);
 	        	$('*[data-toggle="tooltip"]').tooltip({ container:'body' });

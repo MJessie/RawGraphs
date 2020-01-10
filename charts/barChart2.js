@@ -37,16 +37,10 @@ var filtered_multi
         .title('Colors')
         .types(String)
 
-    var filter = model.dimension()
-        .title('Filter')
-
-
     var filter2 = model.dimension()
-        .title('Filter2').multiple(true)
+        .title('Filter').multiple(true)
 
-
-
-
+    //function for filtering data, return new array for each filter key
     function filterData(dataArray, filter, key) {
         let newArr = []
         if (dataArray && filter[key].length > 0) {
@@ -61,7 +55,6 @@ var filtered_multi
         else {
             newArr = dataArray
         }
-        console.log('key', key, 'newarray from function', newArr)
         return newArr
     }
 
@@ -70,18 +63,17 @@ var filtered_multi
     // for the X and Y dimensions and casts them as numbers
     model.map(function (data) {
 
+        //setting width of dropdown
         var dropdown = document.getElementsByClassName("dropdown-menu dropdown-menu-form ng-scope");
         if (dropdown && dropdown.length > 0) {
-            console.log("dropdown",dropdown)
+            console.log("dropdown", dropdown)
             dropdown[0].style.width = "280%"
             dropdown[0].style.overflowX = "hidden"
         }
 
-        console.log(filter2(), "filter2()")
-        //filtering multiple dimensions
+        //filtering data acc to filter values chosen
         if (window.filtered_multi) {
             var filterKeys = Object.keys(window.filtered_multi)
-            var newMultiArr = []
             var newfilArr = []
 
             filterKeys.forEach((key, index) => {
@@ -91,7 +83,7 @@ var filtered_multi
                 else {
                     try { newfilArr = filterData(newfilArr, window.filtered_multi, key) } catch { }
                 }
-            })
+            })/* 
             data.forEach((element) => {
                 filterKeys.forEach((key) => {
                     window.filtered_multi[key].forEach((values) => {
@@ -99,20 +91,14 @@ var filtered_multi
                             newMultiArr.push(element)
                     })
                 })
-            })
+            }) */
 
 
         }
 
         window.filter2_keys = filter2()
         var response = filter2();
-
-        if (!filter()) {
-            window.filtered = []
-        }
-
-        let newData = []
-
+//setting array for filter values to be shown in dropdown
         if (response) {
             const finalObj = {};
             response.forEach(itemName => {
@@ -149,31 +135,7 @@ var filtered_multi
             window.filterObj_multi = []
         }
 
-        //filter the data acc to values
-        if (window.filtered.length > 0) {
-
-            try {
-                data.forEach((element) => {
-                    window.filtered.forEach((fil) => {
-                        if (element[filter()] === fil['id']) {
-                            newData.push(element)
-                        }
-                    })
-                })
-            }
-            catch (e) {
-                newData = data;
-            }
-        }
-        else {
-            newData = data
-        }
-
-        var filterCol = [];
-        var uniq;
-
-        finalData = newData.length > 0 ? newData : data;
-        finalData = newfilArr.length > 0 ? newfilArr : data;
+        finalData = (newfilArr.length > 0 || Object.keys(window.filtered_multi).length > 0) ? newfilArr : data;
 
         var results = d3.nest()
             .key(function (d) {
@@ -201,22 +163,6 @@ var filtered_multi
             })
         })
 
-        //create new array with key of filter
-
-        data.forEach((element) => {
-            filterCol.push(element[filter()])
-        })
-
-        //get unique values
-
-        uniq = [... new Set(filterCol)]
-
-        //set window object for filter values
-        window.filterObj = uniq.map((element) => {
-            label = element
-            id = element
-            return { id, label }
-        })
         return results;
     })
 
