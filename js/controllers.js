@@ -189,6 +189,56 @@ angular.module('raw.controllers', [])
     });
 
 
+    $scope.multi_model = {};
+    $scope.searchSelectAllSettings = { enableSearch: true, showSelectAll: true, keyboardControls: true, styleActive: true };
+
+
+$scope.$watch('testObj',test12=>{
+  console.log("test",test12)
+})
+
+    //for filter select option handling
+    $scope.$watch('selectFilter',selectFilter => {
+      console.log('selectFilter',selectFilter)
+      console.log($scope.disphide)
+    })
+
+    $scope.disphide = {};
+
+    $scope.hid = true;
+
+    $scope.hideDiv = function() {
+      if($scope.hid) {
+        $scope.hid = false
+      }
+
+      else $scope.hid = true
+    } 
+    //for druid apis (getting data from druid)
+
+    $scope.apiList = [
+      { name: "Pie/Bar", url: "http://localhost:3000/getData/api/id1" },
+      { name: "Pie/Bar/Sunburst", url: "http://localhost:3000/getData/api/id2" }
+      ,{name:"wiki",url:"http://localhost:3000/getData/api/wiki"}
+    ]
+//options for selecting druid dataset
+    $scope.$watch('selectOption', selectOption => {
+      if(!selectOption) {
+        return
+      }
+      console.log(selectOption,$scope.example1model,$scope.multi_model)
+
+      var req = {
+        method: 'GET',
+        url: selectOption
+      }
+      $http(req).then(res => {console.log(res.data)
+        selectArray(res.data);
+      })
+        .catch(err => { console.log('error', err) })
+    })
+
+
     $scope.samples = [
       { title : 'Biggest cities per continent', type : 'Distributions', url : 'data/cities.csv'},
       { title : 'Countries GDP', type : 'Other', url : 'data/countriesGDP.csv'},
