@@ -214,12 +214,30 @@ $scope.$watch('testObj',test12=>{
 
       else $scope.hid = true
     } 
+
+    $scope.divclicked = (event) =>{
+      name = event['target']['innerHTML']
+      console.log("Cicked",event['target']['innerHTML']);
+      $scope.apiList.forEach((element)=>{
+        if(element['name']===name) {
+          var req = {
+            method: 'GET',
+            url: element['url']
+          }
+          $http(req).then(res => {
+            parseText(d3.tsvFormat(res.data.data))
+          })
+            .catch(err => { console.log('error', err) })
+        }
+      })
+    }
     //for druid apis (getting data from druid)
 
     $scope.apiList = [
-      { name: "Pie/Bar", url: "http://localhost:3000/getData/api/id1" },
-      { name: "Pie/Bar/Sunburst", url: "http://localhost:3000/getData/api/id2" }
-      ,{name:"wiki",url:"http://localhost:3000/getData/api/wiki"}
+      { name: "grouped", url: "http://localhost:3000/getData/api/getGrouped" },
+      { name: "DownloadCompleted", url: "http://localhost:3000/getData/api/getDownloadContentData" },
+      { name: "GenerateAttestation", url: "http://localhost:3000/getData/api/getGenerateAttestationData" },
+      { name: "SessionCompleted", url: "http://localhost:3000/getData/api/getSessionCompletedData" }
     ]
 //options for selecting druid dataset
     $scope.$watch('selectOption', selectOption => {
@@ -232,8 +250,9 @@ $scope.$watch('testObj',test12=>{
         method: 'GET',
         url: selectOption
       }
-      $http(req).then(res => {console.log(res.data)
-        selectArray(res.data);
+      $http(req).then(res => {console.log("res",res.data)
+        //selectArray(res.data);
+        parseText(d3.tsvFormat(res.data.data))
       })
         .catch(err => { console.log('error', err) })
     })

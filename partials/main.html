@@ -58,11 +58,15 @@
 				</select>
 			 --><!-- 
 			 <input type="text" ng-model="selectFilter"> -->
-			
+			<!-- 
 				   <select ng-model="selectOption">
 					<option value="">--Select--</option>
 					<option ng-repeat="option in apiList" value="{{option.url}}">{{option.name}}</option>
 					</select>
+ -->
+					<div class="row">
+						<div class="col-md-3 menu-items" ng-repeat="option in apiList" ng-click="divclicked($event)">{{option.name}}</div>
+					</div>
 			</div>
 
 			<div class="row">
@@ -70,22 +74,22 @@
 					<div class="col-lg-2">
 
 						<ul class="nav nav-pills nav-stacked nav-pills-stacked-example">
-							<li role="presentation" ng-class="{active:!parsed && importMode=='clipboard'}"><a href="#" ng-click="parsed=false;importMode='clipboard'"><i class="fa fa-clipboard breath-right"></i>Paste</a></li>
+							<!-- <li role="presentation" ng-class="{active:!parsed && importMode=='clipboard'}"><a href="#" ng-click="parsed=false;importMode='clipboard'"><i class="fa fa-clipboard breath-right"></i>Paste</a></li>
 				      <li role="presentation" ng-class="{active:!parsed && importMode=='file'}"><a href="#" ng-click="parsed=false;importMode='file'"><i class="fa fa-file-text breath-right"></i>Upload a file</a></li>
 				      <li role="presentation" ng-class="{active:!parsed && importMode=='url'}"><a href="#" ng-click="parsed=false;importMode='url'"><i class="fa fa-cloud breath-right"></i>From URL</a></li>
 							<li role="presentation" ng-class="{active:!parsed && importMode=='sample'}"><a href="#" ng-click="parsed=false;importMode='sample'"><i class="fa fa-gift breath-right"></i>Try our samples</a></li>
-				    </ul>
+				     --></ul>
 
 					</div>
 
 					<div class="col-lg-10">
 
 						<!-- Clipboard -->
-						<div ng-show="importMode=='clipboard' && !json && !parsed">
+						<!-- <div ng-show="importMode=='clipboard' && !json && !parsed">
 							<textarea ui-codemirror="{lineWrapping : true,   dragDrop : false}" class="text-clipboard margin-bottom" ng-model="clipboardText" placeholder="Paste your data here from other applications"></textarea>
 							<p class="help-block">Copy and paste your data from other applications or websites. You can use tabular (TSV, CSV, DSV) or JSON data<p>
 
-						</div>
+						</div> -->
 
 						<!-- File -->
 						<div ng-show="importMode=='file'&& !json && !parsed">
@@ -134,7 +138,7 @@
 						</div>
 
 						<!-- Default -->
-						<div ng-show="parsed">
+						<!-- <div ng-show="parsed">
 
 							<div data-ng-show="dataView != 'table'">
 								<div class="parsed">
@@ -145,12 +149,12 @@
 							<div raw-table class="data-table" data-ng-show="dataView == 'table'"></div>
 
 
-						</div>
+						</div> -->
 
 						<div class="json-viewer margin-bottom" json-viewer json="json" ng-show="json" on-select="antani"></div>
 
-						<p ng-show="json" class="help-block">Please select the array <strong>[ ]</strong> containing the records you want to load from the JSON above.</p>
-
+						<!-- <p ng-show="json" class="help-block">Please select the array <strong>[ ]</strong> containing the records you want to load from the JSON above.</p>
+ -->
 						<!-- Sample -->
 						<div ng-show="importMode=='sample' && !parsed">
 							<div class="row">
@@ -171,7 +175,7 @@
 							<div data-ng-show="!loading && error" class="alert alert-warning"><i class="fa fa-thumbs-down breath-right"></i><strong>Whoops! </strong>{{error}}</div>
 							<div data-ng-show="loading && text.length" class="alert alert-loading"><i class="fa breath-right fa-refresh fa-spin"></i>Loading your data. Please wait.</div>
 						</div>
-
+<!-- 
 						<div ng-show="parsed">
 
 							<div class="pull-right">
@@ -189,7 +193,7 @@
 									</button>
 								</div>
 
-							</div>
+							</div> -->
 
 							<!--<a ng-show="!unstacked" ng-click="unstack()" class="btn btn-default">Stack data</a>
 							<a ng-show="unstacked" ng-click="stack()" class="pull-right">Unstack data<i class="fa fa-toggle-on breath-left"></i></a>-->
