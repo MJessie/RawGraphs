@@ -8,7 +8,7 @@
 
 					<div class="col-lg-2">
 
-						<h3 id="data">Load your data
+						<h3 id="data">Choose your data
 							<!--<button type="button"
 								class="choose btn btn-default"
 								ng-model="sample"
@@ -65,7 +65,7 @@
 					</select>
  -->
 					<div class="row">
-						<div class="col-md-3 menu-items" ng-repeat="option in apiList" ng-click="divclicked($event)">{{option.name}}</div>
+						<button class="btn btn-default menu-items" ng-repeat="option in apiList" ng-click="divclicked($event)">{{option.name}}</button>
 					</div>
 			</div>
 
@@ -476,7 +476,7 @@
 
 </section>
 
-<section class="dark" ng-show="model.isValid()" style="padding-bottom:50px">
+<!-- <section class="dark" ng-show="model.isValid()" style="padding-bottom:50px">
 
 	<div class="container">
 
@@ -502,5 +502,5 @@
 		</div>
 
 	</div>
-</section>
+</section> -->
 </div>

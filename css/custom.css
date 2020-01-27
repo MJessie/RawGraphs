@@ -1,9 +1,17 @@
 .menu-items {
-    background-color:grey;
-    border: 1px solid black;
+    border: 0.3px solid black;
     border-radius: 20px;
-    margin: 2%;
-    color: #ffff;
-    padding: 1%;
+    margin: 2.5%;
+    padding: 1.5%;
     text-align: center;
-font-weight: 900;}
+font-weight: 900;
+cursor: pointer;
+}
+.btn:hover, .btn:active{
+    background-color: #66dab1 !important;
+    color:#fff;
+} 
+.activereports{
+    background-color: #66dab1 !important;
+    color:#fff !important;
+}

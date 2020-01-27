@@ -216,8 +216,9 @@ $scope.$watch('testObj',test12=>{
     } 
 
     $scope.divclicked = (event) =>{
-      name = event['target']['innerHTML']
-      console.log("Cicked",event['target']['innerHTML']);
+      name = event['target']['innerHTML'];
+      $(".menu-items").removeClass("activereports");
+      $(event.target).addClass("activereports");
       $scope.apiList.forEach((element)=>{
         if(element['name']===name) {
           var req = {
@@ -234,10 +235,10 @@ $scope.$watch('testObj',test12=>{
     //for druid apis (getting data from druid)
 
     $scope.apiList = [
-      { name: "grouped", url: "http://localhost:3000/getData/api/getGrouped" },
-      { name: "DownloadCompleted", url: "http://localhost:3000/getData/api/getDownloadContentData" },
-      { name: "GenerateAttestation", url: "http://localhost:3000/getData/api/getGenerateAttestationData" },
-      { name: "SessionCompleted", url: "http://localhost:3000/getData/api/getSessionCompletedData" }
+      { name: "Grouped", url: config.APIURL+"/getData/api/getGrouped" },
+      { name: "DownloadCompleted", url: config.APIURL+"/getData/api/getDownloadContentData" },
+      { name: "GenerateAttestation", url: config.APIURL+"/getData/api/getGenerateAttestationData" },
+      { name: "SessionCompleted", url: config.APIURL+"/getData/api/getSessionCompletedData" }
     ]
 //options for selecting druid dataset
     $scope.$watch('selectOption', selectOption => {
@@ -460,7 +461,7 @@ $scope.$watch('testObj',test12=>{
 
         $timeout(function() {
           $scope.charts = raw.charts.values().sort(function (a,b){ return d3.ascending(a.category(),b.category()) || d3.ascending(a.title(),b.title()) })
-          $scope.chart = $scope.charts.filter(d => {return d.title() == 'Scatter Plot'})[0];
+          $scope.chart = $scope.charts.filter(d => {return d.title() == 'Bar chart'})[0];
           $scope.model = $scope.chart ? $scope.chart.model() : null;
         });
       } catch(e){
