@@ -1,3 +1,3 @@
 const config = {
-    APIURL:"http://socion-pda-dashboard.stackroute.com:3000"
+    APIURL:"http://localhost:3000"
 }

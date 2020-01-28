@@ -163,6 +163,7 @@ var filtered_multi
             })
         })
 
+        console.log("results",results);
         return results;
     })
 
@@ -215,7 +216,7 @@ var filtered_multi
     // selection represents the d3 selection (svg)
     // data is not the original set of records
     // but the result of the model map function
-    chart.draw(function (selection, data) {
+    chart.draw(function (selection, data) {console.log("data",data)
         // Define margins
         var margin = {
             top: 0,
