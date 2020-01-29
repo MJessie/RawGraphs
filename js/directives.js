@@ -185,7 +185,7 @@ angular.module('raw.directives', [])
 							filterval = ele['value'][0]
 						 }
 					 })
-					const url = "http://localhost:3000/getFiltered?dimension="+dimension+"&filterval="+filterval
+					const url = config.APIURL+"/getFiltered?dimension="+dimension+"&filterval="+filterval
 					const xmlHttp = new XMLHttpRequest();
 					xmlHttp.open("GET",url,false)
 					xmlHttp.send();
