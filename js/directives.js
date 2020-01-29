@@ -134,19 +134,66 @@ angular.module('raw.directives', [])
 	      link: function postLink(scope, element, attrs) {
 
 	        function update(){
+				console.log("update called");
 
-				// scope.filterObj_multi = window.filterObj_multi;
-				// if(scope.filterObj_multi && scope.filterObj_multi.length > 0 && window.filter2_keys) {
-				// 	scope.filterObj_multi.forEach((element) => {  
-				// 		scope.multi_model[element['key']] = scope.multi_model[element['key']] || []
-				// 		scope.multi_model = _.pick(scope.multi_model,window.filter2_keys)	
-				// 	})
-				// }
-				// if(scope.filterObj_multi && scope.filterObj_multi.length === 0) {
-				// 	scope.multi_model = {}
-				// }
-				// window.filtered_multi = scope.multi_model;
+				var dimArr = []
 
+				if(scope.model){
+					var modelarr = scope.model.dimensions().values();
+					modelarr.forEach((ele)=>{
+						let title = ele.title()
+						let val = ele()
+						let smObj = {};
+						smObj[title] = val;
+						dimArr.push({key:title,value:val})
+					})
+				}
+				
+				////filter implementation
+				 scope.filterObj_multi = window.filterObj_multi;
+				 if(scope.filterObj_multi && scope.filterObj_multi.length > 0 && window.filter2_keys) {
+				 	scope.filterObj_multi.forEach((element) => {  
+				 		scope.multi_model[element['key']] = scope.multi_model[element['key']] || []
+				 		scope.multi_model = _.pick(scope.multi_model,window.filter2_keys)	
+				 	})
+				 }
+				 if(scope.filterObj_multi && scope.filterObj_multi.length === 0) {
+				 	scope.multi_model = {}
+				 }
+				 window.filtered_multi = scope.multi_model;
+				 ////filter implementation
+                /* 
+				 if(window.queryFilters && Object.keys(window.queryFilters).length === 2) {
+					var filter = window.queryFilters;
+					const url = "http://localhost:3000/getFiltered?dimension="+filter['dimension']+"&filterval="+filter['filterval']
+					const xmlHttp = new XMLHttpRequest();
+					xmlHttp.open("GET",url,false)
+					xmlHttp.send();
+					const response = JSON.parse(xmlHttp.responseText)
+					console.log("res",response)
+					scope.data = response['data'];
+				 } */
+
+				 if(dimArr.length > 0 && dimArr[0]['value']!=null &&  dimArr[1]['value']!=null) {
+					 let dimension;
+					 let filterval;
+					 dimArr.forEach(ele => {
+						 if(ele['key'] === 'X Axis') {
+							 dimension = ele['value'][0]
+						 }
+						 if(ele['key'] === 'Y Axis') {
+							filterval = ele['value'][0]
+						 }
+					 })
+					const url = "http://localhost:3000/getFiltered?dimension="+dimension+"&filterval="+filterval
+					const xmlHttp = new XMLHttpRequest();
+					xmlHttp.open("GET",url,false)
+					xmlHttp.send();
+					const response = JSON.parse(xmlHttp.responseText)
+					console.log("res",response)
+					scope.data = response['data'];
+					console.log(dimension,filterval,"dimension,filterval")
+				 }
 
 	        	$('*[data-toggle="tooltip"]').tooltip({ container:'body' });
 
@@ -473,7 +520,7 @@ angular.module('raw.directives', [])
 	      scope:false,
 	    	//  templateUrl : 'templates/dimensions.html',
 	      link: function postLink(scope, element, attrs) {
-
+/* 
 		      scope.$watch('metadata', metadata => {
 		      	if(!metadata.length) element.find('li').remove();
 			      element.find('li').draggable({
@@ -483,7 +530,18 @@ angular.module('raw.directives', [])
 			        start : onStart,
 					containment: "document"
 			      })
-		     	})
+				 }) */
+				 
+				 scope.$watch('dataDimensions', dataDimensions => {
+					if(!dataDimensions.length) element.find('li').remove();
+					element.find('li').draggable({
+					  connectToSortable:'.dimensions-container',
+					  helper : 'clone',
+					  revert: 'invalid',
+					  start : onStart,
+					  containment: "document"
+					})
+				   })
 
 			   	function onStart(e, ui) {
 			      ui.helper.addClass("dropped");

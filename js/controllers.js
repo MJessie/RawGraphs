@@ -192,15 +192,9 @@ angular.module('raw.controllers', [])
     $scope.multi_model = {};
     $scope.searchSelectAllSettings = { enableSearch: true, showSelectAll: true, keyboardControls: true, styleActive: true };
 
-
-$scope.$watch('testObj',test12=>{
-  console.log("test",test12)
-})
-
     //for filter select option handling
     $scope.$watch('selectFilter',selectFilter => {
       console.log('selectFilter',selectFilter)
-      console.log($scope.disphide)
     })
 
     $scope.disphide = {};
@@ -233,6 +227,19 @@ $scope.$watch('testObj',test12=>{
       })
     }
     //for druid apis (getting data from druid)
+
+
+    $scope.dataDimensions = [
+      {key:"month",type:"String"},
+      {key:"Generate Attestation",type:"String"},
+      {key:"Session Completed",type:"String"}
+    ]
+    
+    $timeout(function() {
+      $scope.charts = raw.charts.values().sort(function (a,b){ return d3.ascending(a.category(),b.category()) || d3.ascending(a.title(),b.title()) })
+      $scope.chart = $scope.charts.filter(d => {return d.title() == 'Bar chart3'})[0];
+      $scope.model = $scope.chart ? $scope.chart.model() : null;
+    });
 
     $scope.apiList = [
       { name: "Grouped", url: config.APIURL+"/getData/api/getGrouped" },
@@ -461,7 +468,7 @@ $scope.$watch('testObj',test12=>{
 
         $timeout(function() {
           $scope.charts = raw.charts.values().sort(function (a,b){ return d3.ascending(a.category(),b.category()) || d3.ascending(a.title(),b.title()) })
-          $scope.chart = $scope.charts.filter(d => {return d.title() == 'Bar chart'})[0];
+          $scope.chart = $scope.charts.filter(d => {return d.title() == 'Bar chart 2'})[0];
           $scope.model = $scope.chart ? $scope.chart.model() : null;
         });
       } catch(e){

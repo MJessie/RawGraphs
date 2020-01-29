@@ -1,6 +1,6 @@
 <div class="wrapper">
 
-	<section class="" id="load-data">
+	<section ng-if="false" class="" id="load-data">
 
 		<div class="container">
 
@@ -224,7 +224,7 @@
 		</section>
 
 
-		<section class="dark" data-ng-show="!error && data.length && parsed">
+		<section class="dark" ng-if="false">
 
 			<div class="container">
 
@@ -303,7 +303,7 @@
 
 		</section>
 
-		<section class="" data-ng-show="!error && data.length && parsed">
+		<section class="">
 
 			<div class="container">
 
@@ -323,7 +323,7 @@
 					<div class="row">
 
 						<div class="col-lg-3 col-md-3 col-sm-6">
-							<div draggable>
+							<!-- <div draggable>
 								<ul class="list-unstyled dimensions-list">
 									<li class="dimension" data-dimension="{{dimension}}" ng-repeat="dimension in metadata track by $index">
 										<span class="dimension-key">{{ dimension.key }}</span>
@@ -331,7 +331,18 @@
 										<span class="dimension-icon pull-right"><i class="fa fa-arrow-right"></i></span>
 									</li>
 								</ul>
+							</div> -->
+
+							<div draggable>
+								<ul class="list-unstyled dimensions-list">
+									<li class="dimension" data-dimension="{{dimension}}" ng-repeat="dimension in dataDimensions track by $index">
+										<span class="dimension-key">{{ dimension.key }}</span>
+										<span class="dimension-type">{{dimension.type}}</span>
+										<span class="dimension-icon pull-right"><i class="fa fa-arrow-right"></i></span>
+									</li>
+								</ul>
 							</div>
+
 						</div>
 
 						<div class="col-lg-9 col-md-9 col-sm-6 mapping">
@@ -405,7 +416,7 @@
 
 </section>
 
-<section class="dark" data-ng-show="!error && data.length && parsed">
+<section class="dark">
 
 	<div class="container">
 

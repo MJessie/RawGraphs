@@ -1,12 +1,5 @@
-var filterObj
-var filtered
-
-var filter2_keys
-var filterObj_multi
-var filtered_multi
-
-var queryFilters
 (function () {
+
     // A multiple bar chart
 
     // The Model
@@ -23,139 +16,35 @@ var queryFilters
         .types(Number, String)
         .required(true)
     // Values dimension. It will define the height of the bars
-    var sizes = model.dimension()
+/*     var sizes = model.dimension()
         .title('Height')
         .types(Number)
-
+ */
     // Group dimension.
-    // It can accept both numbers and stringsconsole.log(testData,"testdata")
-    var groups = model.dimension()
+    // It can accept both numbers and strings
+    /* var groups = model.dimension()
         .title('Groups')
-        .types(Number, String)
+        .types(Number, String) */
 
 
     // Colors dimension. It will define the color of the bars
-    var colorsDimesion = model.dimension()
+/*     var colorsDimesion = model.dimension()
         .title('Colors')
         .types(String)
+ */
 
-        var yAxis = model.dimension()
-        .title('YAXIS')
-        .types(String,Number)
+    var yAxis = model.dimension()
+        .title('Y Axis')
+        .types(String, Number)
         .required(true)
-
-    var filter2 = model.dimension()
-        .title('Filter').multiple(true)
-
-    //function for filtering data, return new array for each filter key
-    function filterData(dataArray, filter, key) {
-        let newArr = []
-        if (dataArray && filter[key].length > 0) {
-            dataArray.forEach((element) => {
-                filter[key].forEach((fil) => {
-                    if (element[key] === fil['id']) {
-                        newArr.push(element)
-                    }
-                })
-            })
-        }
-        else {
-            newArr = dataArray
-        }
-        return newArr
-    }
 
     // Mapping function
     // For each record in the data returns the values
     // for the X and Y dimensions and casts them as numbers
     model.map(function (data) {
-
-        //setting width of dropdown
-        var dropdown = document.getElementsByClassName("dropdown-menu dropdown-menu-form ng-scope");
-        if (dropdown && dropdown.length > 0) {
-            dropdown[0].style.width = "280%"
-            dropdown[0].style.overflowX = "hidden"
-        }
-
-        //filtering data acc to filter values chosen
-        if (window.filtered_multi) {
-            var filterKeys = Object.keys(window.filtered_multi)
-            var newfilArr = []
-
-            filterKeys.forEach((key, index) => {
-                if (index === 0) {
-                    try { newfilArr = filterData(data, window.filtered_multi, key) } catch { }
-                }
-                else {
-                    try { newfilArr = filterData(newfilArr, window.filtered_multi, key) } catch { }
-                }
-            })/* 
-            data.forEach((element) => {
-                filterKeys.forEach((key) => {
-                    window.filtered_multi[key].forEach((values) => {
-                        if (values['id'] === element[key])
-                            newMultiArr.push(element)
-                    })
-                })
-            }) */
-
-
-        }
-
-        window.filter2_keys = filter2()
-        var response = filter2();
-//setting array for filter values to be shown in dropdown
-        if (response) {
-            const finalObj = {};
-            response.forEach(itemName => {
-                data.forEach(dataObj => {
-                    if (!finalObj[itemName]) {
-                        finalObj[itemName] = [];
-                        finalObj[itemName].push(dataObj[itemName])
-                    }
-                    else {
-                        if (finalObj[itemName].indexOf(dataObj[itemName]) === -1) {
-                            finalObj[itemName].push(dataObj[itemName]);
-                        }
-                    }
-                });
-            });
-            var newObj = {}
-            var new2arr = []
-            //
-            keysArr = Object.keys(finalObj)
-            keysArr.forEach((key) => {
-                newArr = finalObj[key].map((element) => {
-                    return { id: element, label: element }
-                })
-                newObj[key] = newArr
-            })
-
-            if (newObj) {
-                Object.keys(newObj).forEach((ele) => {
-                    new2arr.push({ key: ele, options: newObj[ele] })
-                })
-                window.filterObj_multi = new2arr
-            }
-        } else {
-            window.filterObj_multi = []
-        }
-
-        finalData = (newfilArr.length > 0 || Object.keys(window.filtered_multi).length > 0) ? newfilArr : data;
-//filter functionality end
-
-if(yAxis() && yAxis().length > 0  && categories() && categories().length > 0) {
-//console.log(yAxis(),"yAxis() or filterval",categories(),"Xaxis")
-const obj = {dimension:categories()[0],filterval:yAxis()[0]}
-window.queryFilters = obj;
-}
-else{
-    window.queryFilters = undefined;
-}
-
         var results = d3.nest()
             .key(function (d) {
-                return d[groups()]
+                return d[null]
             })
             .key(function (d) {
                 return d[categories()]
@@ -167,11 +56,11 @@ else{
                         return e[x]
                     }),
                     category: categories(v[0]),
-                    group: groups(v[0]),
-                    color: colorsDimesion(v[0])
+                    group: null,
+                    color: null
                 }
             })
-            .entries(finalData)
+            .entries(data)
 
         // remap the array
         results.forEach(function (d) {
@@ -179,7 +68,7 @@ else{
                 return item.value
             })
         })
-      //  console.log("results",results)
+
         return results;
     })
 
@@ -187,10 +76,10 @@ else{
     // The Chart
 
     var chart = raw.chart()
-        .title("Bar chart 2")
+        .title("Bar chart3")
         .description("A bar chart or bar graph is a chart or graph that presents grouped data with rectangular bars with heights proportional to the values that they represent.</br> Chart based on <a href='https://bl.ocks.org/mbostock/3310560'>https://bl.ocks.org/mbostock/3310560</a>")
         .thumbnail("imgs/barChart.png")
-        .category('Other/Test')
+        .category('Other')
         .model(model)
 
     // visualiziation options
@@ -233,6 +122,7 @@ else{
     // data is not the original set of records
     // but the result of the model map function
     chart.draw(function (selection, data) {
+
         // Define margins
         var margin = {
             top: 0,
@@ -241,7 +131,7 @@ else{
             left: marginLeft()
         };
         //define title space
-        var titleSpace = groups() == null ? 0 : 30;
+        var titleSpace = null == null ? 0 : 30;
 
         // Define common variables.
         // Find the overall maximum value
