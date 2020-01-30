@@ -7,11 +7,25 @@
 font-weight: 900;
 cursor: pointer;
 }
-.btn:hover, .btn:active{
+/* .btn:hover, .btn:active{
     background-color: #66dab1 !important;
     color:#fff;
-} 
+} */ 
 .activereports{
     background-color: #66dab1 !important;
     color:#fff !important;
+}
+.dropdown {
+    float: right;
+}
+
+header{
+    height:80px;
+}
+section.dark {
+    margin-top: 15px;
+}
+.navbar-brand> img{
+    width:100%;
+    max-height: none !important;
 }

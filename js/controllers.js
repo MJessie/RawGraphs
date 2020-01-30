@@ -234,6 +234,10 @@ angular.module('raw.controllers', [])
       {key:"Generate Attestation",type:"String"},
       {key:"Session Completed",type:"String"}
     ]
+
+    $scope.locations = [ {id: 1, label: "Chennai"}, {id: 2, label: "Bengaluru"}, {id: 3, label: "Delhi"}];
+    $scope.selectedLocation = [];
+    $scope.dropdownSettings= { enableSearch: true,selectionLimit: 1, keyboardControls: true, styleActive: true };
     
     $timeout(function() {
       $scope.charts = raw.charts.values().sort(function (a,b){ return d3.ascending(a.category(),b.category()) || d3.ascending(a.title(),b.title()) })

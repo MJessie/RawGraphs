@@ -310,10 +310,17 @@
 				<div id="mapping" class="row-fluid">
 
 					<div>
-						<h3>Map your Dimensions
+						<div class="dropdown">
+							<div style="font-weight: 900;margin-bottom: 10px;">Select Location</div>
+						<div ng-dropdown-multiselect="" options="locations" 
+						selected-model="selectedLocation" extra-settings="dropdownSettings"></div>
+
+						</div>
+                        
+						<h3>Map your Dimensions<!-- 
 							<a data-toggle="tooltip"
 							data-title="Clear all"
-							ng-click="model.clear()" class="pull-right light"><i class="fa fa-trash-o"></i></a>
+							ng-click="model.clear()" class="pull-right light"><i class="fa fa-trash-o"></i></a> -->
 							<span class="clearfix"></span>
 						</h3>
 						<!--<p class="help-block">Drag your into </p>-->
@@ -337,7 +344,7 @@
 								<ul class="list-unstyled dimensions-list">
 									<li class="dimension" data-dimension="{{dimension}}" ng-repeat="dimension in dataDimensions track by $index">
 										<span class="dimension-key">{{ dimension.key }}</span>
-										<span class="dimension-type">{{dimension.type}}</span>
+										<!-- <span class="dimension-type">{{dimension.type}}</span> -->
 										<span class="dimension-icon pull-right"><i class="fa fa-arrow-right"></i></span>
 									</li>
 								</ul>
@@ -420,13 +427,13 @@
 
 	<div class="container">
 
-		<h3 id="options">
+		<h3 ng-hide="true" id="options">
 			Customize your Visualization
 		</h3>
 
 		<div class="row">
 
-			<div class="col-lg-3">
+			<div ng-hide="true" class="col-lg-3">
 
 
 				<div ng-repeat="obj in filterObj_multi"><span>{{obj['key']}}</span>

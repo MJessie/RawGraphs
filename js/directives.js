@@ -506,7 +506,7 @@ angular.module('raw.directives', [])
 					var hasInvalidType = values().filter(d => { return !isValidType(d); }).length > 0;
 					scope.messageText = hasInvalidType
 						? "You should only use " + scope.types.map(d => { return d.name.toLowerCase() + "s"; }).join(" or ") + " here"
-						: "Drag " + scope.types.map(d => { return d.name.toLowerCase() + "s"; }).join(", ") + " here";
+						: "Drag " + (scope.title === 'X Axis'? "Dimensions Here" : "Metrics Here") 
 					//element.parent().find('.msg').html(messageText);
 				}
 
