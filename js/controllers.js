@@ -230,9 +230,9 @@ angular.module('raw.controllers', [])
 
 
     $scope.dataDimensions = [
-      {key:"month",type:"String"},
-      {key:"Generate Attestation",type:"String"},
-      {key:"Session Completed",type:"String"}
+      {key:"month",type:"String",extra:"Month"},
+      {key:"Generate Attestation",type:"String",extra:"Number of Generate Attestation"},
+      {key:"Session Completed",type:"String",extra:"Number of Session Completed"}
     ]
 
     $scope.locations = [ {id: 1, label: "Chennai"}, {id: 2, label: "Bengaluru"}, {id: 3, label: "Delhi"}];
